@@ -96,7 +96,7 @@ namespace LibreriaApi.Repository
             ResultadoRegistro resultado = new ResultadoRegistro
             {
                 ConfirmacionRegistro = true,
-                Respuesta = "Registro exitoso."
+                Respuesta = Resources.Mensajes.MensajeRegistroExitoso
             };
             return Task.FromResult(resultado);
         }

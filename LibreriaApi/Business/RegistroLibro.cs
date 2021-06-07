@@ -37,30 +37,30 @@ namespace LibreriaApi.Business
         {
             if (libro == null)
             {
-                return await Task.FromResult(new ResultadoRegistro { ConfirmacionRegistro = false, Respuesta = "No se obtiene información de los parámetros." });
+                return await Task.FromResult(new ResultadoRegistro { ConfirmacionRegistro = false, Respuesta = Resources.Mensajes.MensajeSinInformacionParametros });
             }
 
             Autor autor = await _repositorioAutor.ObtenerAutorPorIdentificador(libro.IdAutor);
             if (autor == null || string.IsNullOrEmpty(autor.Nombre))
             {
-                return await Task.FromResult(new ResultadoRegistro { ConfirmacionRegistro = false, Respuesta = "El autor no esta registrado" });
+                return await Task.FromResult(new ResultadoRegistro { ConfirmacionRegistro = false, Respuesta = Resources.Mensajes.MensajeAutorNoRegistrado });
             }
 
             Editorial editorial = await _repositorioEditorial.ObtenerEditorialPorIdentificador(libro.IdEditorial);
             if (editorial == null || string.IsNullOrEmpty(editorial.Nombre))
             {
-                return await Task.FromResult(new ResultadoRegistro { ConfirmacionRegistro = false, Respuesta = "La editorial no esta registrada." });
+                return await Task.FromResult(new ResultadoRegistro { ConfirmacionRegistro = false, Respuesta = Resources.Mensajes.MensajeEditorialNoRegistrada });
             }
 
             Genero genero = await _repositorioGenero.ObtenerGeneroPorIdentificador(libro.IdGenero);
             if (genero == null || string.IsNullOrEmpty(genero.Descripcion))
             {
-                return await Task.FromResult(new ResultadoRegistro { ConfirmacionRegistro = false, Respuesta = "El genero no esta registrado." });
+                return await Task.FromResult(new ResultadoRegistro { ConfirmacionRegistro = false, Respuesta = Resources.Mensajes.MensajeGeneroNoRegistrado });
             }
 
             if (!PermiteRegistroLibroPorEditorial(editorial.MaximoLibrosRegistrados, libro.IdEditorial))
             {
-                return await Task.FromResult(new ResultadoRegistro { ConfirmacionRegistro = false, Respuesta = "No es posible registrar el libro, se alcanzó el máximo permitido." });
+                return await Task.FromResult(new ResultadoRegistro { ConfirmacionRegistro = false, Respuesta = Resources.Mensajes.MensajeMaximoLibrosPermitidos });
             }
             
             return await Task.FromResult(await _repositorioLibro.RegistrarLibro(libro));
@@ -77,7 +77,7 @@ namespace LibreriaApi.Business
             bool retorno = false;
             int cantidadLibrosEditorial = _repositorioLibro.CantidadLibrosPorEditorial(idEditorial);
 
-            if (cantidadLibrosEditorial < maximoLibroEditorial)
+            if (cantidadLibrosEditorial <= maximoLibroEditorial)
             {
                 retorno = true;
             }
